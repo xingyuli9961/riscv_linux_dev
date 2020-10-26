@@ -29,3 +29,4 @@ This is the list of files that I modified:
 21. arch/riscv/kernel/smp.c
 22. arch/riscv/mm/fault.c
 // Still in progress: fix the entry.S file to trace all the syscalls and add kutrace_control syscall
+23. arch/riscv/kernel/entry.S
