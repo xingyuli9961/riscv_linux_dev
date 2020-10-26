@@ -13,6 +13,10 @@
 #include <asm/thread_info.h>
 #include <asm/asm-offsets.h>
 
+/* dsites 2019.03.01 */
+#include <linux/kutrace.h>
+
+
 	.text
 	.altmacro
 
@@ -205,6 +209,18 @@ check_syscall_nr:
 	la s0, sys_ni_syscall
 	/* Syscall number held in a7 */
 	bgeu a7, t0, 1f
+
+        /* dsites 2019.03.01 */
+        /* Xingyu: call kutrace profiling functions. */
+        /* It seems that riscv uses some other convention? */
+        addi sp sp -4
+        sd a7 0(sp)
+        la s0 kutrace_map_nr
+        /* Record the syscall number */
+        ori a1 a0 KUTRACE_SYSCALL64
+        /* Pass in low 16 bits of call arg0 */
+        
+
 	la s0, sys_call_table
 	slli t0, a7, RISCV_LGPTR
 	add s0, s0, t0

@@ -2,6 +2,7 @@
 
 This is the list of files that I modified:
 
+// The changes as listed in the KUTRACE repo for x86
 1. arch/x86/entry/common.c
 2. arch/x86/Kconfig
 3. arch/x86/kernel/acpi/cstate.c
@@ -21,7 +22,10 @@ This is the list of files that I modified:
 17. kernel/sched/core.c
 18. kernel/softirq.c
 
+// The changes I made for the compatability of riscv kernel
 19. arch/riscv/Kconfig
+// Modified registers and macros that are specific for riscv
 20. arch/riscv/kernel/irq.c
 21. arch/riscv/kernel/smp.c
 22. arch/riscv/mm/fault.c
+// Still in progress: fix the entry.S file to trace all the syscalls and add kutrace_control syscall
