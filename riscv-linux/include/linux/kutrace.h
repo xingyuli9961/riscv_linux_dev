@@ -23,10 +23,6 @@
  *
  */
 
-#ifndef CONFIG_KUTRACE
-#define CONFIG_KUTRACE
-
-
 #ifndef _LINUX_KUTRACE_H
 #define _LINUX_KUTRACE_H
 
@@ -158,4 +154,4 @@ extern u64 *kutrace_pid_filter;
 #endif /* _LINUX_KUTRACE_H */
 
 
-#endif
+

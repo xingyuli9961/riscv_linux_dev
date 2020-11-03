@@ -212,14 +212,26 @@ check_syscall_nr:
 
         /* dsites 2019.03.01 */
         /* Xingyu: call kutrace profiling functions. */
-        /* It seems that riscv uses some other convention? */
-        addi sp sp -4
-        sd a7 0(sp)
-        la s0 kutrace_map_nr
+        addi sp, sp, -8
+        sw a0, 0(sp)
+        sw a1, 4(sp)
+
+        // backup the origin a0 (arg0)
+        add t1, a0, x0
+        add a0, a7, x0
+        call kutrace_map_nr
         /* Record the syscall number */
-        ori a1 a0 KUTRACE_SYSCALL64
+        li t0, KUTRACE_SYSCALL64
+        or  a0, a0, t0
         /* Pass in low 16 bits of call arg0 */
-        
+        li t2, 0x0FFFF
+        and a1, t1, t2
+        call kutrace1
+
+        lw a0, 0(sp)
+        lw a1, 4(sp)
+        addi sp, sp, 8
+        // end of Xingyu's code
 
 	la s0, sys_call_table
 	slli t0, a7, RISCV_LGPTR
@@ -229,6 +241,31 @@ check_syscall_nr:
 	jalr s0
 
 ret_from_syscall:
+
+
+        /* dsites 2019.03.01 */
+        /* Xingyu: call kutrace profiling functions. */
+        addi sp, sp, -8
+        sw a0, 0(sp)
+        sw a1, 4(sp)
+
+        // backup the origin a0 (arg0)
+        add t1, a0, x0
+        add a0, a7, x0
+        call kutrace_map_nr
+        /* Record the syscall number */
+        li t0, KUTRACE_SYSRET64
+        or  a0, a0, t0
+        /* Pass in low 16 bits of the return value */
+        li t2, 0x0FFFF
+        and a1, t1, t2
+        call kutrace1
+
+        lw a0, 0(sp)
+        lw a1, 4(sp)
+        addi sp, sp, 8
+        // end of Xingyu's code
+
 	/* Set user a0 to kernel a0 */
 	REG_S a0, PT_A0(sp)
 	/* Trace syscalls, but only if requested by the user. */
