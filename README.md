@@ -15,7 +15,7 @@ This is the list of files that I modified:
 10. drivers/acpi/acpi_pad.c
 11. drivers/acpi/processor_idle.c
 12. drivers/idle/intel_idle.c
-13. include/linux/kutrace.h
+13. include/linux/kutrace.h (updated from the x86 version)
 14. kernel/kutrace/kutrace.c
 15. kernel/kutrace/Makefile
 16. kernel/Makefile
@@ -28,5 +28,7 @@ This is the list of files that I modified:
 20. arch/riscv/kernel/irq.c
 21. arch/riscv/kernel/smp.c
 22. arch/riscv/mm/fault.c
-// Still in progress: fix the entry.S file to trace all the syscalls and add kutrace_control syscall
-23. arch/riscv/kernel/entry.S
+// Still in progress: already fixed the entry.S file to trace all the syscalls, needs to add kutrace_control syscall
+23. arch/riscv/kernel/entry.
+// added some kutrace helper functions in this filed.
+24. arch/riscv/kernel/ptrace.c

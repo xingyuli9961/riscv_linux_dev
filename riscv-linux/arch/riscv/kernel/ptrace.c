@@ -174,3 +174,25 @@ void do_syscall_trace_exit(struct pt_regs *regs)
 		trace_sys_exit(regs, regs_return_value(regs));
 #endif
 }
+
+
+/*
+ *  * Allows KUTRACE_SYSCALL to work.  These are called from entry.S in
+ *   * {handle,ret_from}_syscall.
+ *    */
+
+#include <linux/kutrace.h>
+void kutrace1_asm(unsigned int event, unsigned int arg) {
+    if (kutrace_tracing) {
+        (*kutrace_global_ops.kutrace_trace_1)(event, arg);
+    }
+}
+
+int kutrace_map_nr_asm(unsigned int nr) {
+    if (kutrace_tracing) {
+        return (nr + (nr & 0x200));
+    } else {
+        return nr;
+    }
+}
+

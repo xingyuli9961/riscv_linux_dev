@@ -16,7 +16,6 @@
 /* dsites 2019.03.01 */
 #include <linux/kutrace.h>
 
-
 	.text
 	.altmacro
 
@@ -219,14 +218,14 @@ check_syscall_nr:
         // backup the origin a0 (arg0)
         add t1, a0, x0
         add a0, a7, x0
-        call kutrace_map_nr
+        call kutrace_map_nr_asm
         /* Record the syscall number */
         li t0, KUTRACE_SYSCALL64
         or  a0, a0, t0
         /* Pass in low 16 bits of call arg0 */
         li t2, 0x0FFFF
         and a1, t1, t2
-        call kutrace1
+        call kutrace1_asm
 
         lw a0, 0(sp)
         lw a1, 4(sp)
@@ -238,6 +237,9 @@ check_syscall_nr:
 	add s0, s0, t0
 	REG_L s0, 0(s0)
 1:
+        // Xingyu: call kutrace controlling functions
+        // li t0, __NR_kutrace_control
+        // bne a7, t0
 	jalr s0
 
 ret_from_syscall:
@@ -252,14 +254,14 @@ ret_from_syscall:
         // backup the origin a0 (arg0)
         add t1, a0, x0
         add a0, a7, x0
-        call kutrace_map_nr
+        call kutrace_map_nr_asm
         /* Record the syscall number */
         li t0, KUTRACE_SYSRET64
         or  a0, a0, t0
         /* Pass in low 16 bits of the return value */
         li t2, 0x0FFFF
         and a1, t1, t2
-        call kutrace1
+        call kutrace1_asm
 
         lw a0, 0(sp)
         lw a1, 4(sp)

@@ -93,7 +93,7 @@
 /* Reuse the spurious_apic vector to show bottom halves exeuting */
 #define KUTRACE_BOTTOM_HALF	255
 
-
+#ifndef __ASSEMBLY__
 
 /* Procedure interface to loadable module or compiled-in kutrace.c */
 struct kutrace_ops {
@@ -111,12 +111,19 @@ struct kutrace_traceblock {
 	u64 prior_inst_retired;	/* IPC tracking */
 };
 
+#endif /* !__ASSEMBLY__ */
 
 #ifdef CONFIG_KUTRACE
+
+#ifndef __ASSEMBLY__
+
 /* Global variables used by kutrace. Defined in kernel/kutrace/kutrace.c */
 extern bool kutrace_tracing;
 extern struct kutrace_ops kutrace_global_ops;
 extern u64 *kutrace_pid_filter;
+
+
+#endif /* !__ASSEMBLY__ */
 
 /* Insert pid name if first time seen. Races don't matter here. */
 #define kutrace_pidname(next) \
@@ -134,13 +141,14 @@ extern u64 *kutrace_pid_filter;
 		} \
 	}
 
-#define	kutrace1(event, arg) \
+
+#define kutrace1(event, arg) \
 	if (kutrace_tracing) { \
 		(*kutrace_global_ops.kutrace_trace_1)(event, arg); \
 	}
 
 /* map_nr moves 32-bit syscalls 0x200..3FF to 0x400..5FF */
-#define	kutrace_map_nr(nr) (nr + (nr & 0x200)) 
+#define kutrace_map_nr(nr) (nr + (nr & 0x200)) 
 
 #else
 
